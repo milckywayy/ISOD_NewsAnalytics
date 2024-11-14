@@ -1,6 +1,7 @@
 import json
 
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import logging
 
 from model import db, NewsCount
@@ -12,6 +13,8 @@ app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+CORS(app)
 
 db.init_app(app)
 with app.app_context():
