@@ -6,6 +6,8 @@ from flask import Flask, request, jsonify, render_template, session, redirect, u
 from flask_cors import CORS
 import logging
 
+from requests import ConnectTimeout
+
 from model import db, NewsCount
 from usosapi.usosapi import USOSAPISession, USOSAPIAuthorizationError
 
@@ -78,9 +80,15 @@ def index():
 
 @app.route('/usos_auth')
 def usos_auth():
-    host_url = request.host_url
-    callback_url = url_for('login', _external=True).replace('http://localhost:8081', host_url.rstrip('/'))
-    _, request_url = usosapi.get_auth_url(callback=callback_url)
+    try:
+        host_url = request.host_url
+        callback_url = url_for('login', _external=True).replace('http://localhost:8081', host_url.rstrip('/'))
+        _, request_url = usosapi.get_auth_url(callback=callback_url)
+
+    except ConnectTimeout as e:
+        logging.error(f'Connection error while setting USOS auth session: {e}')
+        return redirect(url_for('login'))
+
     return redirect(request_url)
 
 
@@ -107,6 +115,11 @@ def login():
 
         except USOSAPIAuthorizationError:
             logging.error('Failed to authorize user')
+            return redirect(url_for('login'))
+
+        except ConnectTimeout as e:
+            logging.error(f'Connection error while authorizing user: {e}')
+            return redirect(url_for('login'))
 
     return render_template('login.html')
 
@@ -154,6 +167,8 @@ def track():
         else:
             news_counter.count = 1
             news_counter.show = True
+
+    logging.info(f'New view for news: {title}')
 
     db.session.commit()
 
