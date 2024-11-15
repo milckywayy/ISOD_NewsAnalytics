@@ -11,17 +11,6 @@ from usosapi.usosapi import USOSAPISession, USOSAPIAuthorizationError
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s')
 
-app = Flask(__name__)
-app.secret_key = os.environ.get('ISOD_NA_SECRET_KEY', os.urandom(24))
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-CORS(app)
-
-db.init_app(app)
-with app.app_context():
-    db.create_all()
 
 if os.path.exists('config/config.json'):
     with open('config/config.json', 'r') as file:
@@ -30,6 +19,18 @@ else:
     with open('config/default_config.json', 'r') as file:
         app_config = json.load(file)
 
+app = Flask(__name__)
+app.secret_key = os.environ.get('ISOD_NA_SECRET_KEY', os.urandom(24))
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SERVER_NAME'] = f'{app_config["app_host"]}:{app_config["app_port"]}'
+
+CORS(app)
+
+db.init_app(app)
+with app.app_context():
+    db.create_all()
 
 with open('credentials/usos_api_credentials.json', 'r') as file:
     usosapi_credentials = json.load(file)
