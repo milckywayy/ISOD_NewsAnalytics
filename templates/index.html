@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+    <!-- Session Information -->
+    <div class="card mt-5 p-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <p class="mb-0 text-muted">You are logged in as:</p>
+                <h5 class="fw-bold text-primary mb-0">{{ session['name'] }}</h5>
+            </div>
+            <a href="{{ url_for('logout') }}">
+                <button class="btn btn-outline-danger btn-sm">Logout</button>
+            </a>
+        </div>
+    </div>
+
+    <!-- News Section -->
+    {% if news %}
+    <div class="mt-5">
+        <div class="list-group">
+            <div class="list-group-item d-flex justify-content-between bg-light text-dark fw-bold">
+                <div class="row w-100">
+                    <div class="col-8">
+                        Notification Title
+                    </div>
+                    <div class="col-2 text-center">
+                        Views
+                    </div>
+                    <div class="col-2 text-end">
+                        Action
+                    </div>
+                </div>
+            </div>
+
+            {% for news_item in news %}
+                {% if news_item.show %}
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="row w-100 align-items-center">
+
+                            <div class="col-8">
+                                <strong>{{ news_item.title }}</strong>
+                            </div>
+
+                            <div class="col-2 text-center">
+                                <span class="badge bg-info text-dark">{{ news_item.count }}</span>
+                            </div>
+
+                            <div class="col-2 text-end">
+                                <a href="{{ url_for('hide', title=news_item.title) }}">
+                                    <button class="btn btn-outline-danger btn-sm">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </button>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="mt-5 text-center">
+        <p class="text-muted">No notifications available.</p>
+    </div>
+    {% endif %}
+
+{% endblock %}

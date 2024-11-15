@@ -1,0 +1,7 @@
+{
+  "isod_api_base_url": "https://isod.ee.pw.edu.pl/isod-portal/",
+  "isod_news_endpoint_url": "wapi?q=mynewsheaders",
+  "admin_ids": [
+    "1178835"
+  ]
+}

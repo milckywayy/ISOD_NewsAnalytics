@@ -4,5 +4,6 @@ db = SQLAlchemy()
 
 
 class NewsCount(db.Model):
-    news_id = db.Column(db.String, primary_key=True)
-    count = db.Column(db.Integer, default=0)
+    title = db.Column(db.String, primary_key=True)
+    count = db.Column(db.Integer, default=1)
+    show = db.Column(db.Boolean, default=True)
