@@ -17,6 +17,22 @@
         </div>
     </div>
 
+    <!-- .JS TAG -->
+<div class="card mt-5 p-3">
+    <h5>Analytics tag</h5>
+    <div class="input-group">
+        <code id="analytics-tag" class="form-control" readonly>
+            <!-- ISOD-NA TAG - Skopiuj ten kod do html komunikatu -->
+            &lt;script&gt;<br>
+                &emsp;const title = "<b>TU_WSTAWIC_TYTUL_KOMUNIKATU</b>";<br>
+                &emsp;fetch(`https://wrs-ee-test.francecentral.cloudapp.azure.com:8080/track?title=${encodeURIComponent(title)}`);<br>
+            &lt;/script&gt;
+        </code>
+        <button class="btn btn-primary" onclick="copyToClipboard()">Kopiuj</button>
+    </div>
+</div>
+
+
     <!-- News Section -->
     {% if news %}
     <div class="mt-5">
