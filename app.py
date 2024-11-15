@@ -149,7 +149,11 @@ def track():
         )
         db.session.add(news_item)
     else:
-        news_counter.count = news_counter.count + 1
+        if news_counter.show:
+            news_counter.count = news_counter.count + 1
+        else:
+            news_counter.count = 1
+            news_counter.show = True
 
     db.session.commit()
 
