@@ -78,7 +78,9 @@ def index():
 
 @app.route('/usos_auth')
 def usos_auth():
-    _, request_url = usosapi.get_auth_url(callback=url_for('login', _external=True))
+    host_url = request.host_url
+    callback_url = url_for('login', _external=True).replace('http://localhost:8081', host_url.rstrip('/'))
+    _, request_url = usosapi.get_auth_url(callback=callback_url)
     return redirect(request_url)
 
 
