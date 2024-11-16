@@ -18,20 +18,19 @@
     </div>
 
     <!-- .JS TAG -->
-<div class="card mt-5 p-3">
-    <h5>Analytics Tag</h5>
-    <div class="input-group">
-        <code id="analytics-tag" class="form-control text-muted bg-light" readonly>
+    <div class="card mt-5 p-3">
+        <h5>Analytics Tag</h5>
+        <div class="input-group">
+            <code id="analytics-tag" class="form-control text-muted bg-light" readonly>
 <!-- ISOD-NA TAG - Skopiuj ten kod do html komunikatu -->
 &lt;script&gt;<br>
 &emsp;const title = "<b>TU_WSTAWIC_TYTUL_KOMUNIKATU</b>";<br>
 &emsp;fetch(`https://wrs-ee-test.francecentral.cloudapp.azure.com:8080/track?title=${encodeURIComponent(title)}`);<br>
 &lt;/script&gt;
-        </code>
-        <button class="btn btn-primary" onclick="copyToClipboard()">Copy</button>
+            </code>
+            <button class="btn btn-primary" onclick="copyToClipboard()">Copy</button>
+        </div>
     </div>
-</div>
-
 
     <!-- News Section -->
     {% if news %}
@@ -65,11 +64,9 @@
                             </div>
 
                             <div class="col-2 text-end">
-                                <a href="{{ url_for('hide', title=news_item.title) }}">
-                                    <button class="btn btn-outline-danger btn-sm">
-                                        <i class="bi bi-trash"></i> Delete
-                                    </button>
-                                </a>
+                                <button onClick="confirmReset('{{ news_item.title }}')" class="btn btn-outline-danger btn-sm">
+                                    <i class="bi bi-trash"></i> Reset
+                                </button>
                             </div>
 
                         </div>
@@ -83,5 +80,13 @@
         <p class="text-muted">No notifications available.</p>
     </div>
     {% endif %}
+
+    <script>
+        function confirmReset(chosen_title) {
+            if (confirm("Are you sure you want to reset this counter?")) {
+                window.location.href = "{{ url_for('hide', title='') }}" + encodeURIComponent(chosen_title);
+            }
+        }
+    </script>
 
 {% endblock %}
